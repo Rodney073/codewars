@@ -13,7 +13,7 @@ public class ObservedPinTest {
     @Test
     public void testNormalCondition() {
         //SolutionPin sp = new SolutionPin();
-        System.out.println(ObservedPin.getPINs("60"));
+        System.out.println(ObservedPin.getPINs("11"));
     }
 
     public static HashMap<String, String[]> expectations = new HashMap<>() {

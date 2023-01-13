@@ -13,7 +13,8 @@ public class ObservedPin {
 
     public static List<String> getPINs(String observed) {
         List<String> potentialPins = new ArrayList<>();
-        if (isObservedNumberInValidInterval(observed)) {
+        if (!isObservedNumberValid(observed)) {
+            System.out.println("The observed pin is not valid.");
             return potentialPins;
         }
 
@@ -25,9 +26,7 @@ public class ObservedPin {
             if (observed.charAt(observedDigit) - '0' == 0) {
                 potentialDigits = "08";
             } else {
-                for (int row = 0; row < terminalRowSize; row++) {
-                    potentialDigits = getPotentialDigits(observed, observedDigit, potentialDigits, row);
-                }
+                potentialDigits = getPotentialDigits(observed, observedDigit, potentialDigits);
             }
 
             if (potentialPins.size() == 0) {
@@ -41,17 +40,19 @@ public class ObservedPin {
         return potentialPins;
     }
 
-    private static boolean isObservedNumberInValidInterval(String observed) {
-        return observed.length() > 8;
-    }
-
-    private static String getPotentialDigits(String observed, int observedDigit, String potentialDigits, int row) {
-        for (int col = 0; col < terminalColSize; col++) {
-            if (observed.charAt(observedDigit) - '0' == pinTerminal[row][col]) {
-                potentialDigits = collectPotentials(row, col);
+    private static String getPotentialDigits(String observed, int observedDigit, String potentialDigits) {
+        for (int row = 0; row < terminalRowSize; row++) {
+            for (int col = 0; col < terminalColSize; col++) {
+                if (observed.charAt(observedDigit) - '0' == pinTerminal[row][col]) {
+                    potentialDigits = collectPotentials(row, col);
+                }
             }
         }
         return potentialDigits;
+    }
+
+    private static boolean isObservedNumberValid(String observed) {
+        return observed.length() <= 8;
     }
 
     private static List<String> appendPinList(List<String> potentialPins, String potentialDigits) {
